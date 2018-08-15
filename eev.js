@@ -1,5 +1,4 @@
-
-var Eev = (function () {
+var Eev = (function() {
   var id = 0;
   var splitter = /[\s,]+/g;
 
@@ -13,13 +12,13 @@ var Eev = (function () {
   }
 
   LinkedList.prototype = {
-    insert: function (data) {
-      var link = new RunnableLink(this.tail.prev, this.tail, data);
+    insert: function(fn) {
+      var link = new RunnableLink(this.tail.prev, this.tail, fn);
       link.next.prev = link.prev.next = link;
       return link;
     },
 
-    remove: function (link) {
+    remove: function(link) {
       link.prev.next = link.next;
       link.next.prev = link.prev;
     }
@@ -33,64 +32,67 @@ var Eev = (function () {
     this.fn = fn || noop;
   }
 
-  RunnableLink.prototype.run = function (data) {
-    this.fn(data);
-    this.next && this.next.run(data);
+  RunnableLink.prototype.run = function(...args) {
+    this.fn(...args);
+    this.next && this.next.run(...args);
   };
 
-  function noop () { }
+  function noop() {}
 
-  function Eev () {
+  function Eev() {
     this.events = {};
   }
 
   Eev.prototype = {
     constructor: Eev,
 
-    on: function (names, fn) {
+    on: function(names, fn) {
       var me = this;
 
-      names.split(splitter).forEach(function (name) {
+      names.split(splitter).forEach(function(name) {
         var list = me.events[name] || (me.events[name] = new LinkedList());
-        var eev = fn._eev || (fn._eev = (++id));
+        var eev = fn._eev || (fn._eev = ++id);
 
         list.reg[eev] || (list.reg[eev] = list.insert(fn));
       });
     },
 
-    off: function (names, fn) {
+    off: function(names, fn) {
       var me = this;
-      fn && names.split(splitter).forEach(function (name) {
-        var list = me.events[name];
+      fn &&
+        names.split(splitter).forEach(function(name) {
+          var list = me.events[name];
 
-        if (!list) {
-          return;
-        }
+          if (!list) {
+            return;
+          }
 
-        var link = list.reg[fn._eev];
+          var link = list.reg[fn._eev];
 
-        list.reg[fn._eev] = undefined;
+          list.reg[fn._eev] = undefined;
 
-        list && link && list.remove(link);
-      });
+          list && link && list.remove(link);
+        });
     },
 
-    emit: function (name, data) {
+    emit: function(name, ...args) {
       var evt = this.events[name];
-      evt && evt.head.run(data);
+      evt && evt.head.run(...args);
     }
   };
 
   return Eev;
-}());
+})();
 
 // AMD/CommonJS support
-(function (root, factory) {
+(function(root, factory) {
   var define = root.define;
 
   if (define && define.amd) {
     define([], factory);
-  } else if (typeof module !== 'undefined' && module.exports) {
+  } else if (typeof module !== "undefined" && module.exports) {
     module.exports = factory();
   }
-}(this, function () { return Eev; }));
+})(this, function() {
+  return Eev;
+});

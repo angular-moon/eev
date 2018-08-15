@@ -5,8 +5,7 @@
   "main": "eev.js",
   "directories": {},
   "scripts": {
-    "test": "jasmine-node test/*.spec.js",
-    "min": "uglifyjs eev.js --source-map \"filename=eev.min.js.map\" -m -c -o eev.min.js && echo 'Minified size' && cat eev.min.js | gzip -9f | wc -c"
+    "test": "jasmine-node test/eev.spec.js"
   },
   "repository": {
     "type": "git",
@@ -28,7 +27,6 @@
   },
   "homepage": "https://github.com/chrisdavies/eev",
   "devDependencies": {
-    "jasmine-node": "^1.14.5",
-    "uglify-js": "^3.3.4"
+    "jasmine-node": "^1.14.5"
   }
 }

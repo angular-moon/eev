@@ -20,19 +20,19 @@ Create an Eev instance.
 Then, add handlers as you see fit.
 
 ```javascript
-  e.on('some-event', function (data) {
-    alert('got ' + data);
+  e.on('some-event', function (arg) {
+    alert('got ' + arg);
   });
 
-  e.on('some-event', function (data) {
-    console.log('got ' + data);
+  e.on('some-event', function (arg) {
+    console.log('got ' + arg);
   });
 ```
 
 Remove handlers using `off`.
 
 ```javascript
-  function myHandler (data) { console.log(data); }
+  function myHandler (arg) { console.log(arg); }
 
   e.on('some-event', myHandler);
   e.off('some-event', myHandler);
@@ -41,7 +41,7 @@ Remove handlers using `off`.
 Trigger events using `emit`.
 
 ```javascript
-  // The second parameter here is the data you wish to
+  // The second parameter here is the arg you wish to
   // pass to the event handlers
   e.emit('some-event', { foo: 'Bar' });
 ```
@@ -59,7 +59,7 @@ If you want a handler to only run once, you can do this:
 You can register for multiple events at once like this:
 
 ```javascript
-  function myHandler (data) { console.log(data); }
+  function myHandler (arg) { console.log(arg); }
 
   e.on('event1 event2 etc', myHandler);
   e.off('event1 event2 etc', myHandler);
@@ -73,9 +73,9 @@ Stopping propagation isn't build into Eev. If enough people ask for it, I'll bak
     var superOn = Eev.prototype.on;
 
     Eev.prototype.on = function (names, fn) {
-      superOn.call(this, names, function (data) {
-        if (!data.isCanceled) {
-          return fn(data);
+      superOn.call(this, names, function (arg) {
+        if (!arg.isCanceled) {
+          return fn(arg);
         }
       });
     };
@@ -87,8 +87,8 @@ Stopping propagation isn't build into Eev. If enough people ask for it, I'll bak
 With the above patch in place, you can do something like this in your event handlers:
 
 ```js
-e.on('some-event', function foo (data) {
-  data.isCanceled = true; // Now, no downstream handlers should be invoked
+e.on('some-event', function foo (arg) {
+  arg.isCanceled = true; // Now, no downstream handlers should be invoked
 })
 ```
 
