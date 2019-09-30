@@ -1,5 +1,5 @@
 {
-  "name": "eev",
+  "name": "@angular-moon/eev",
   "version": "0.1.4",
   "description": "A tiny, fast, zero-dependency event emitter",
   "main": "eev.js",
@@ -7,9 +7,12 @@
   "scripts": {
     "test": "jasmine-node test/eev.spec.js"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/chrisdavies/eev"
+    "url": "https://github.com/angular-moon/eev"
   },
   "keywords": [
     "emitter",
@@ -23,9 +26,9 @@
   "author": "Chris Davies <ferociousturtle@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/chrisdavies/eev/issues"
+    "url": "https://github.com/angular-moon/eev/issues"
   },
-  "homepage": "https://github.com/chrisdavies/eev",
+  "homepage": "https://github.com/angular-moon/eev",
   "devDependencies": {
     "jasmine-node": "^1.14.5"
   }
